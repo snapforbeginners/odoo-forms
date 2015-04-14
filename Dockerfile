@@ -1,4 +1,4 @@
-FROM haskell:7.8
+FROM haskell:7.10
 
 # update packages
 RUN apt-get update
@@ -10,15 +10,21 @@ RUN mkdir /var/log/odoo
 # make app dir
 RUN mkdir -p /opt/odoo
 
+RUN echo what
+
 ### 1.0 dependencies
-RUN git clone https://github.com/snapframework/io-streams-haproxy.git /opt/deps/io-streams-haproxy
-RUN git clone https://github.com/snapframework/snap.git /opt/deps/snap
-RUN git clone https://github.com/snapframework/snap-core.git /opt/deps/snap-core
-RUN git clone https://github.com/snapframework/snap-server.git /opt/deps/snap-server
-RUN git clone https://github.com/snapframework/snap-loader-static.git /opt/deps/snap-loader-static
-RUN git clone https://github.com/snapframework/heist.git /opt/deps/heist
-RUN git clone https://github.com/mightybyte/snaplet-postgresql-simple.git /opt/deps/snaplet-postgres-simple
-RUN cd /opt/deps/snaplet-postgres-simple && git checkout 1.0
+RUN git clone https://github.com/snapframework/io-streams-haproxy.git /opt/deps/io-streams-haproxy && \
+    git clone https://github.com/snapframework/snap.git /opt/deps/snap && \
+    git clone https://github.com/snapframework/snap-core.git /opt/deps/snap-core && \
+    git clone https://github.com/snapframework/snap-server.git /opt/deps/snap-server && \
+    git clone https://github.com/snapframework/snap-loader-static.git /opt/deps/snap-loader-static && \
+    git clone https://github.com/snapframework/heist.git /opt/deps/heist && \
+    git clone https://github.com/mightybyte/snaplet-postgresql-simple.git /opt/deps/snaplet-postgres-simple && \
+    cd /opt/deps/snaplet-postgres-simple && git checkout 1.0
+
+RUN git clone https://github.com/christopherbiscardi/digestive-functors /opt/deps/digestive-functors
+#    && \
+#    cd /opt/deps/digestive-functors && git checkout snap-1.0
 
 # Create Sandbox and Add Source Deps
 RUN cd /opt/odoo &&\
@@ -29,7 +35,9 @@ RUN cd /opt/odoo &&\
         cabal sandbox add-source /opt/deps/snap-server &&\
         cabal sandbox add-source /opt/deps/snap-loader-static &&\
         cabal sandbox add-source /opt/deps/heist &&\
-        cabal sandbox add-source /opt/deps/snaplet-postgres-simple
+        cabal sandbox add-source /opt/deps/snaplet-postgres-simple &&\
+        cabal sandbox add-source /opt/deps/digestive-functors/digestive-functors-heist &&\
+        cabal sandbox add-source /opt/deps/digestive-functors/digestive-functors-snap
 
 ### END 1.0 dependencies
 
@@ -38,7 +46,7 @@ RUN cd /opt/odoo &&\
 # our .cabal file.
 ADD ./odoo.cabal /opt/odoo/odoo.cabal
 
-RUN cd /opt/odoo && cabal install --only-dependencies -j4
+RUN cd /opt/odoo && cabal install --allow-newer
 
 # Add Application Code
 ADD ./src /opt/odoo/src

@@ -2,6 +2,7 @@
 module Odoo.Handlers where
 
 import qualified Data.Text                     as T (pack)
+import           Odoo.Forms
 import           Odoo.Microblog                (getAllMicroblogs, getMicroblog,
                                                 insertMicroblog)
 import           Odoo.Types                    (Blog (..), MicroblogID (..),

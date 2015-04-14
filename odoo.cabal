@@ -39,7 +39,10 @@ Executable odoo
     time                      >= 1.1     && < 1.6,
     xmlhtml                   >= 0.1,
     snaplet-postgresql-simple >= 1.0,
-    postgresql-simple         >= 0.4.9.0
+    postgresql-simple         >= 0.4.9.0,
+    digestive-functors        >= 0.7     && < 0.8,
+    digestive-functors-snap   >= 0.6.0.0 && < 0.7,
+    digestive-functors-heist  >= 0.8.6.0 && < 0.8.7
 
   if flag(old-base)
     build-depends:
