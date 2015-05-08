@@ -15,7 +15,8 @@ import           Data.Map.Syntax                             (( ## ))
 import           Data.Monoid
 import qualified Data.Text                                   as T
 import qualified Heist.Interpreted                           as I
-import           Odoo.Handlers                               (getAllTest,
+import           Pulsar.Handlers                             (blogFormHandler,
+                                                              getAllTest,
                                                               getOneTest,
                                                               insertTest)
 import           Snap.Core
@@ -73,6 +74,7 @@ routes = [ ("/login",    with auth handleLoginSubmit)
          , ("/insert", method POST $ with pg $ insertTest)
          , ("/show", method GET $ with pg $ getAllTest)
          , ("/show/one", method GET $ with pg $ getOneTest)
+         , ("/blog", blogFormHandler)
          , ("",          serveDirectory "static")
          ]
 
